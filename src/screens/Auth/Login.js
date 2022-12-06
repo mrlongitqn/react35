@@ -1,8 +1,11 @@
 import React from 'react';
 import {MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import axios, { AxiosHeaders } from 'axios';
+import { ListUserApi } from '../../Api/Users';
+import { Business } from '../business/Business';
+import { DetailBusiness, ListBusiness } from '../../Api/Business';
 
-const Login = () =>{
+const Login = (props) =>{
 
     let data = {
         email: "admin@sdc.udn.vn",
@@ -15,6 +18,7 @@ const Login = () =>{
                 let data = result.data.data;
                 console.log(data);
                 localStorage.setItem('token', data.access_token);
+                window.location.reload(false);
         }else{
             console.log('Sai');
         }
@@ -27,20 +31,14 @@ const Login = () =>{
         console.log(token);
     }
     const btnGetUser = ()=>{
-        let token = localStorage.getItem('token');
-        axios.get('https://photo.azurecloud.vn/api/v1/users?page=1&per_page=10&keyword=&sortBy=&field=', 
-            {
-                headers: {
-                  'Authorization': 'Bearer '+token
-                }
-            
-        })
-        .then(result =>{
-            console.log(result);
-            localStorage.removeItem('token');
+        DetailBusiness(506).then(data=>{
+            console.log(data);
         })
     }
-
+const btnLogout = () =>{
+    localStorage.removeItem('token');
+    window.location.reload(false);
+}
     return (
         <MDBContainer fluid className="p-3 my-5 h-custom">
     
@@ -88,6 +86,8 @@ const Login = () =>{
                 <MDBBtn onClick={btnShow} className="mb-0 px-5" size='lg'>Show Token</MDBBtn>
                 <br/>
                 <MDBBtn onClick={btnGetUser} className="mb-0 px-5" size='lg'>Lay nguoi dung</MDBBtn>
+                <p></p>
+                <MDBBtn onClick={btnLogout} className="mb-0 px-5" size='lg'>Lay nguoi dung</MDBBtn>
                 <p className="small fw-bold mt-2 pt-1 mb-2">Don't have an account? <a href="#!" className="link-danger">Register</a></p>
               </div>
     
